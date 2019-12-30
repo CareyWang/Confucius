@@ -1,4 +1,4 @@
-# antd
+# Confucius
 
 ## Project setup
 ```

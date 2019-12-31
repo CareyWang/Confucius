@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 require(`@/plugins/element-ui`)
 require(`@/plugins/clipboard`)
+require(`@/plugins/base64`)
+require(`@/plugins/particles`)
 
 Vue.config.productionTip = false
 

@@ -3,17 +3,15 @@ pipeline {
   stages {
     stage('Pull code') {
       steps {
-        sh '''cd /var/www/http/
-rm -rf /var/www/http/Confucius
-git clone https://github.com/CareyWang/Confucius.git'''
+        sh '''rm -rf /var/www/http/Confucius
+'''
+        sh 'cd /var/www/http/ && git clone https://github.com/CareyWang/Confucius.git'
       }
     }
 
     stage('Build') {
       steps {
-        sh '''cd /var/www/http/Confucius
-yarn install
-yarn build'''
+        sh 'cd /var/www/http/Confucius && yarn install && yarn build'
       }
     }
 

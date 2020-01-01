@@ -6,7 +6,7 @@
           <div slot="header">Subscription Converter</div>
           <el-container>
             <el-form :model="form" label-width="120px" label-position="left" style="width: 100%">
-              <el-form-item label="定制深度:">
+              <el-form-item label="模式设置:">
                 <el-radio v-model="advanced" label="1">基础模式</el-radio>
                 <el-radio v-model="advanced" label="2">进阶模式</el-radio>
               </el-form-item>
@@ -23,6 +23,11 @@
                 <el-form-item label="后端地址:">
                   <el-input ref="backend" v-model="baseUrl" placeholder="动动小手，（建议）自行搭建后端服务">
                     <el-button slot="append" @click="gotoGayhub" icon="el-icon-link">前往项目仓库</el-button>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="远程配置:">
+                  <el-input ref="backend" v-model="form.remoteConfig" placeholder="请参考仓库默认配置文件pref.ini">
+                    <el-button slot="append" @click="gotoRemoteConfig" icon="el-icon-link">默认配置示例</el-button>
                   </el-input>
                 </el-form-item>
                 <el-form-item label="IncludeRemarks:">
@@ -56,7 +61,12 @@
 
               <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
                 <el-button style="width: 120px" type="danger" @click="makeUrl">生成订阅链接</el-button>
-                <el-button style="width: 120px" type="primary" @click="clashInstall" icon="el-icon-connection">一键导入Clash</el-button>
+                <el-button
+                  style="width: 120px"
+                  type="primary"
+                  @click="clashInstall"
+                  icon="el-icon-connection"
+                >一键导入Clash</el-button>
                 <!-- <el-button style="width: 120px" type="primary" @click="surgeInstall" icon="el-icon-connection">一键导入Surge</el-button> -->
               </el-form-item>
             </el-form>
@@ -68,11 +78,13 @@
 </template>
 
 <script>
+const samoleRemoteConfig = 'https://raw.githubusercontent.com/lzdnico/subconverteriniexample/master/customcountry.ini'
+
 export default {
   data() {
     return {
       baseUrl: "https://api.wcc.best/sub?",
-      gayhubRelease: 'https://github.com/tindy2013/subconverter/releases',
+      gayhubRelease: "https://github.com/tindy2013/subconverter/releases",
       advanced: "1",
 
       options: {
@@ -95,14 +107,14 @@ export default {
       form: {
         sourceSubUrl: "",
         clientType: "",
+        remoteConfig: "",
         excludeRemarks: "",
         includeRemarks: "",
         ClashBaseRule: "",
         SurgeBaseRule: "",
         SurfboardRuleBase: "",
         rename_node: "",
-        ruleset: "",
-        clash_proxy_group: ""
+        ruleset: ""
       },
 
       customSubUrl: ""
@@ -119,7 +131,10 @@ export default {
       this.$message.success("Copied!");
     },
     gotoGayhub() {
-      window.open(this.gayhubRelease)
+      window.open(this.gayhubRelease);
+    },
+    gotoRemoteConfig() {
+      window.open(samoleRemoteConfig)
     },
     clashInstall() {
       const url = "clash://install-config?url=";
@@ -142,13 +157,19 @@ export default {
         "&url=" +
         encodeURIComponent(this.form.sourceSubUrl);
 
-      if (this.form.excludeRemarks !== "") {
-        this.customSubUrl +=
-          "&exclude=" + encodeURIComponent(this.form.excludeRemarks);
-      }
-      if (this.form.includeRemarks !== "") {
-        this.customSubUrl +=
-          "&include=" + encodeURIComponent(this.form.includeRemarks);
+      if (this.advanced === "2") {
+        if (this.form.remoteConfig !== "") {
+          this.customSubUrl +=
+            "&config=" + encodeURIComponent(this.form.remoteConfig);
+        }
+        if (this.form.excludeRemarks !== "") {
+          this.customSubUrl +=
+            "&exclude=" + encodeURIComponent(this.form.excludeRemarks);
+        }
+        if (this.form.includeRemarks !== "") {
+          this.customSubUrl +=
+            "&include=" + encodeURIComponent(this.form.includeRemarks);
+        }
       }
 
       this.$copyText(this.customSubUrl);

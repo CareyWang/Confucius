@@ -78,7 +78,7 @@
 </template>
 
 <script>
-const samoleRemoteConfig = 'https://raw.githubusercontent.com/lzdnico/subconverteriniexample/master/customcountry.ini'
+const samoleRemoteConfig = 'https://raw.githubusercontent.com/CareyWang/Rules/master/subconverter.ini'
 
 export default {
   data() {

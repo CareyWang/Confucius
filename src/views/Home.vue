@@ -39,14 +39,11 @@
   }
 </script>
 
-<style scoped>
-  .body {
-    background: #0f3854;
-    background: radial-gradient(ellipse at center, #0a2e38 0%, #000000 70%);
-    background-size: 100%;
-  }
-
+<style scope>
   #clock {
+    /* background: #0f3854; */
+    /* background: radial-gradient(ellipse at center, #0a2e38 0%, #000000 70%); */
+    /* background-size: 100%; */
     font-family: 'Share Tech Mono', monospace;
     color: #ffffff;
     text-align: center;
@@ -55,8 +52,8 @@
     top: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    /* text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0); */
-    text-shadow: 0 0 20px #000000, 0 0 20px rgba(10, 175, 230, 0);
+    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+    /* text-shadow: 0 0 20px #000000, 0 0 20px rgba(10, 175, 230, 0); */
   }
 
   #clock .time {

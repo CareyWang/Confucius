@@ -11,7 +11,7 @@
                 <el-radio v-model="advanced" label="2">进阶模式</el-radio>
               </el-form-item>
               <el-form-item label="订阅链接:">
-                <el-input v-model="form.sourceSubUrl" placeholder="多个订阅请用 | 分隔"></el-input>
+                <el-input v-model="form.sourceSubUrl" type="textarea" rows="3" placeholder="多个订阅请每行一个或用 | 分隔"></el-input>
               </el-form-item>
               <el-form-item label="客户端:">
                 <el-select v-model="form.clientType" style="width: 100%">
@@ -26,8 +26,8 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item label="远程配置:">
-                  <el-input ref="backend" v-model="form.remoteConfig" placeholder="请参考仓库默认配置文件pref.ini">
-                    <el-button slot="append" @click="gotoRemoteConfig" icon="el-icon-link">默认配置示例</el-button>
+                  <el-input ref="backend" v-model="form.remoteConfig" placeholder="格式请参考示例配置文件">
+                    <el-button slot="append" @click="gotoRemoteConfig" icon="el-icon-link">配置示例</el-button>
                   </el-input>
                 </el-form-item>
                 <el-form-item label="IncludeRemarks:">
@@ -150,12 +150,15 @@ export default {
         return false;
       }
 
+      let sourceSub = this.form.sourceSubUrl
+      sourceSub = sourceSub.replace(/[\n|\r|\n\r]/g, '|')
+
       this.customSubUrl =
         this.baseUrl +
         "target=" +
         this.form.clientType +
         "&url=" +
-        encodeURIComponent(this.form.sourceSubUrl);
+        encodeURIComponent(sourceSub);
 
       if (this.advanced === "2") {
         if (this.form.remoteConfig !== "") {

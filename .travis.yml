@@ -1,0 +1,33 @@
+# 指定语言环境
+language: node_js
+# 指定需要sudo权限
+sudo: required
+# 指定node_js版本
+node_js: 
+  - 10.18.0
+# 指定缓存模块，可选。缓存可加快编译速度。
+cache:
+  directories:
+    - node_modules
+
+# 指定源码分支
+branches:
+  only:
+    - master
+
+before_install:
+  - rm -rf dist/
+
+# Start: Build Lifecycle
+install:
+  - yarn install
+
+# 执行清缓存，生成网页操作
+script:
+  - yarn build
+
+# 部署
+# after_script:
+#   - 
+
+# End: Build LifeCycle

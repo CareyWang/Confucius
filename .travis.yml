@@ -17,6 +17,8 @@ branches:
 
 before_install:
   - rm -rf dist/
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- -- version 1.21.1
+  - export PATH="$HOME/.yarn/bin:$PATH"
 
 # Start: Build Lifecycle
 install:

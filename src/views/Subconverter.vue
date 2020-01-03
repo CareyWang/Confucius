@@ -78,7 +78,7 @@
 </template>
 
 <script>
-const samoleRemoteConfig = 'https://raw.githubusercontent.com/CareyWang/Rules/master/subconverter.ini'
+const sampleRemoteConfig = 'https://raw.githubusercontent.com/CareyWang/Rules/master/subconverter.ini'
 
 export default {
   data() {
@@ -134,7 +134,7 @@ export default {
       window.open(this.gayhubRelease);
     },
     gotoRemoteConfig() {
-      window.open(samoleRemoteConfig)
+      window.open(sampleRemoteConfig)
     },
     clashInstall() {
       const url = "clash://install-config?url=";

@@ -137,10 +137,20 @@ export default {
       window.open(sampleRemoteConfig)
     },
     clashInstall() {
+      if (this.customSubUrl === '') {
+        this.$message.error('请先填写必填项，生成订阅链接')
+        return false
+      }
+
       const url = "clash://install-config?url=";
       window.open(url + encodeURIComponent(this.customSubUrl));
     },
     surgeInstall() {
+      if (this.customSubUrl === '') {
+        this.$message.error('请先填写必填项，生成订阅链接')
+        return false
+      }
+      
       const url = "surge://install-config?url=";
       window.open(url + this.customSubUrl);
     },

@@ -25,6 +25,10 @@
                     <el-button slot="append" @click="gotoGayhub" icon="el-icon-link">前往项目仓库</el-button>
                   </el-input>
                 </el-form-item>
+                <el-form-item label="emoji:">
+                  <el-radio v-model="form.emoji" label="true">是</el-radio>
+                  <el-radio v-model="form.emoji" label="false">否</el-radio>
+                </el-form-item>
                 <el-form-item label="远程配置:">
                   <el-input ref="backend" v-model="form.remoteConfig" placeholder="格式请参考示例配置文件">
                     <el-button slot="append" @click="gotoRemoteConfig" icon="el-icon-link">配置示例</el-button>
@@ -107,6 +111,7 @@ export default {
       form: {
         sourceSubUrl: "",
         clientType: "",
+        emoji: "true",
         remoteConfig: "",
         excludeRemarks: "",
         includeRemarks: "",
@@ -174,6 +179,10 @@ export default {
         if (this.form.remoteConfig !== "") {
           this.customSubUrl +=
             "&config=" + encodeURIComponent(this.form.remoteConfig);
+        }
+        if (this.form.emoji === "false") {
+          this.customSubUrl +=
+            "&emoji=" + this.form.emoji;
         }
         if (this.form.excludeRemarks !== "") {
           this.customSubUrl +=

@@ -11,7 +11,12 @@
                 <el-radio v-model="advanced" label="2">进阶模式</el-radio>
               </el-form-item>
               <el-form-item label="订阅链接:">
-                <el-input v-model="form.sourceSubUrl" type="textarea" rows="3" placeholder="多个订阅请每行一个或用 | 分隔"></el-input>
+                <el-input
+                  v-model="form.sourceSubUrl"
+                  type="textarea"
+                  rows="3"
+                  placeholder="多个订阅请每行一个或用 | 分隔"
+                ></el-input>
               </el-form-item>
               <el-form-item label="客户端:">
                 <el-select v-model="form.clientType" style="width: 100%">
@@ -30,9 +35,14 @@
                   <el-radio v-model="form.emoji" label="false">否</el-radio>
                 </el-form-item>
                 <el-form-item label="远程配置:">
-                  <el-input ref="backend" v-model="form.remoteConfig" placeholder="格式请参考示例配置文件">
+                  <el-autocomplete
+                    v-model="form.remoteConfig"
+                    :fetch-suggestions="getPersonalRemoteConfig"
+                    placeholder="格式请参考示例配置文件"
+                    style="width: 100%"
+                  >
                     <el-button slot="append" @click="gotoRemoteConfig" icon="el-icon-link">配置示例</el-button>
-                  </el-input>
+                  </el-autocomplete>
                 </el-form-item>
                 <el-form-item label="IncludeRemarks:">
                   <el-input v-model="form.includeRemarks" placeholder="节点名包含的关键字，支持正则" />
@@ -82,7 +92,10 @@
 </template>
 
 <script>
-const sampleRemoteConfig = 'https://raw.githubusercontent.com/CareyWang/Rules/master/subconverter.ini'
+const personalRemoteConfig = [
+  { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/urltest-universal.ini", label: "Urltest" },
+  { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/no-urltest-universal.ini", label: "No-Urltest" }
+];
 
 export default {
   data() {
@@ -139,23 +152,32 @@ export default {
       window.open(this.gayhubRelease);
     },
     gotoRemoteConfig() {
-      window.open(sampleRemoteConfig)
+      window.open(personalRemoteConfig[0]['value']);
+    },
+    getPersonalRemoteConfig(queryString, cb) {
+      let results = queryString ? personalRemoteConfig.filter(this.createFilter(queryString)) : personalRemoteConfig;
+      cb(results)
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      }
     },
     clashInstall() {
-      if (this.customSubUrl === '') {
-        this.$message.error('请先填写必填项，生成订阅链接')
-        return false
+      if (this.customSubUrl === "") {
+        this.$message.error("请先填写必填项，生成订阅链接");
+        return false;
       }
 
       const url = "clash://install-config?url=";
       window.open(url + encodeURIComponent(this.customSubUrl));
     },
     surgeInstall() {
-      if (this.customSubUrl === '') {
-        this.$message.error('请先填写必填项，生成订阅链接')
-        return false
+      if (this.customSubUrl === "") {
+        this.$message.error("请先填写必填项，生成订阅链接");
+        return false;
       }
-      
+
       const url = "surge://install-config?url=";
       window.open(url + this.customSubUrl);
     },
@@ -165,8 +187,8 @@ export default {
         return false;
       }
 
-      let sourceSub = this.form.sourceSubUrl
-      sourceSub = sourceSub.replace(/[\n|\r|\n\r]/g, '|')
+      let sourceSub = this.form.sourceSubUrl;
+      sourceSub = sourceSub.replace(/[\n|\r|\n\r]/g, "|");
 
       this.customSubUrl =
         this.baseUrl +
@@ -181,8 +203,7 @@ export default {
             "&config=" + encodeURIComponent(this.form.remoteConfig);
         }
         if (this.form.emoji === "false") {
-          this.customSubUrl +=
-            "&emoji=" + this.form.emoji;
+          this.customSubUrl += "&emoji=" + this.form.emoji;
         }
         if (this.form.excludeRemarks !== "") {
           this.customSubUrl +=

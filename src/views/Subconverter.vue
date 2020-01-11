@@ -92,6 +92,8 @@
 </template>
 
 <script>
+const remoteConfigSample = 'https://raw.githubusercontent.com/tindy2013/subconverter/master/base/example_external_config.ini'
+
 const personalRemoteConfig = [
   { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/urltest-universal.ini", label: "Urltest" },
   { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/no-urltest-universal.ini", label: "No-Urltest" }
@@ -152,7 +154,7 @@ export default {
       window.open(this.gayhubRelease);
     },
     gotoRemoteConfig() {
-      window.open(personalRemoteConfig[0]['value']);
+      window.open(remoteConfigSample);
     },
     getPersonalRemoteConfig(queryString, cb) {
       let results = queryString ? personalRemoteConfig.filter(this.createFilter(queryString)) : personalRemoteConfig;

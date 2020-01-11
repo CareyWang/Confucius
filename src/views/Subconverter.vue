@@ -25,14 +25,14 @@
               </el-form-item>
 
               <div v-if="advanced === '2'">
-                <el-form-item label="后端地址:">
-                  <el-input ref="backend" v-model="baseUrl" placeholder="动动小手，（建议）自行搭建后端服务">
-                    <el-button slot="append" @click="gotoGayhub" icon="el-icon-link">前往项目仓库</el-button>
-                  </el-input>
-                </el-form-item>
                 <el-form-item label="emoji:">
                   <el-radio v-model="form.emoji" label="true">是</el-radio>
                   <el-radio v-model="form.emoji" label="false">否</el-radio>
+                </el-form-item>
+                <el-form-item label="后端地址:">
+                  <el-input ref="backend" v-model="form.customBackend" placeholder="动动小手，（建议）自行搭建后端服务。例：http://127.0.0.1:25500?sub">
+                    <el-button slot="append" @click="gotoGayhub" icon="el-icon-link">前往项目仓库</el-button>
+                  </el-input>
                 </el-form-item>
                 <el-form-item label="远程配置:">
                   <el-autocomplete
@@ -95,6 +95,7 @@
 const remoteConfigSample = 'https://raw.githubusercontent.com/tindy2013/subconverter/master/base/example_external_config.ini'
 const gayhubRelease = 'https://github.com/tindy2013/subconverter/releases';
 
+const defaultBackend = 'https://api.wcc.best/sub?'
 const personalRemoteConfig = [
   { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/urltest-universal.ini", label: "Urltest" },
   { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/no-urltest-universal.ini", label: "No-Urltest" }
@@ -103,7 +104,6 @@ const personalRemoteConfig = [
 export default {
   data() {
     return {
-      baseUrl: "https://api.wcc.best/sub?",
       advanced: "1",
 
       options: {
@@ -127,6 +127,7 @@ export default {
         sourceSubUrl: "",
         clientType: "",
         emoji: "true",
+        customBackend: "",
         remoteConfig: "",
         excludeRemarks: "",
         includeRemarks: "",
@@ -189,11 +190,13 @@ export default {
         return false;
       }
 
+      let backend = this.form.customBackend === '' ? defaultBackend : this.form.customBackend
+
       let sourceSub = this.form.sourceSubUrl;
       sourceSub = sourceSub.replace(/[\n|\r|\n\r]/g, "|");
 
       this.customSubUrl =
-        this.baseUrl +
+        backend +
         "target=" +
         this.form.clientType +
         "&url=" +

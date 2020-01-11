@@ -93,6 +93,7 @@
 
 <script>
 const remoteConfigSample = 'https://raw.githubusercontent.com/tindy2013/subconverter/master/base/example_external_config.ini'
+const gayhubRelease = 'https://github.com/tindy2013/subconverter/releases';
 
 const personalRemoteConfig = [
   { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/urltest-universal.ini", label: "Urltest" },
@@ -103,7 +104,6 @@ export default {
   data() {
     return {
       baseUrl: "https://api.wcc.best/sub?",
-      gayhubRelease: "https://github.com/tindy2013/subconverter/releases",
       advanced: "1",
 
       options: {
@@ -151,7 +151,7 @@ export default {
       this.$message.success("Copied!");
     },
     gotoGayhub() {
-      window.open(this.gayhubRelease);
+      window.open(gayhubRelease);
     },
     gotoRemoteConfig() {
       window.open(remoteConfigSample);

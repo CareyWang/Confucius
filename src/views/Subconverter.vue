@@ -98,7 +98,8 @@ const gayhubRelease = 'https://github.com/tindy2013/subconverter/releases';
 const defaultBackend = 'https://api.wcc.best/sub?'
 const personalRemoteConfig = [
   { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/urltest-universal.ini", label: "Urltest" },
-  { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/no-urltest-universal.ini", label: "No-Urltest" }
+  { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/no-urltest-universal.ini", label: "No-Urltest" },
+  { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/no-urltest-ssr-group.ini", label: "No-Urltest-Group" }
 ];
 
 export default {

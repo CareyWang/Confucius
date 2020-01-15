@@ -39,7 +39,13 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item label="远程配置:">
-                  <el-select v-model="form.remoteConfig" placeholder="请选择" style="width: 100%">
+                  <el-select 
+                    v-model="form.remoteConfig" 
+                    allow-create
+                    filterable
+                    placeholder="请选择" 
+                    style="width: 100%"
+                  >
                     <el-option-group
                       v-for="group in options.remoteConfig"
                       :key="group.label"

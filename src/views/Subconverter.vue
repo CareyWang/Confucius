@@ -159,6 +159,15 @@ export default {
                 value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/maying.ini'
               }
             ]
+          },
+          {
+            label: 'Special',
+            options: [
+              {
+                label: 'NeteaseUnblock',
+                value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/special/netease.ini'
+              }
+            ]
           }
         ]
       },

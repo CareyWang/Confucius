@@ -30,19 +30,29 @@
                   <el-radio v-model="form.emoji" label="false">否</el-radio>
                 </el-form-item>
                 <el-form-item label="后端地址:">
-                  <el-input ref="backend" v-model="form.customBackend" placeholder="动动小手，（建议）自行搭建后端服务。例：http://127.0.0.1:25500?sub">
+                  <el-input
+                    ref="backend"
+                    v-model="form.customBackend"
+                    placeholder="动动小手，（建议）自行搭建后端服务。例：http://127.0.0.1:25500?sub"
+                  >
                     <el-button slot="append" @click="gotoGayhub" icon="el-icon-link">前往项目仓库</el-button>
                   </el-input>
                 </el-form-item>
                 <el-form-item label="远程配置:">
-                  <el-autocomplete
-                    v-model="form.remoteConfig"
-                    :fetch-suggestions="getPersonalRemoteConfig"
-                    placeholder="格式请参考示例配置文件"
-                    style="width: 100%"
-                  >
+                  <el-select v-model="form.remoteConfig" placeholder="请选择" style="width: 100%">
+                    <el-option-group
+                      v-for="group in options.remoteConfig"
+                      :key="group.label"
+                      :label="group.label">
+                      <el-option
+                        v-for="item in group.options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                      </el-option>
+                    </el-option-group>
                     <el-button slot="append" @click="gotoRemoteConfig" icon="el-icon-link">配置示例</el-button>
-                  </el-autocomplete>
+                  </el-select>
                 </el-form-item>
                 <el-form-item label="IncludeRemarks:">
                   <el-input v-model="form.includeRemarks" placeholder="节点名包含的关键字，支持正则" />
@@ -92,20 +102,14 @@
 </template>
 
 <script>
-const remoteConfigSample = 'https://raw.githubusercontent.com/tindy2013/subconverter/master/base/example_external_config.ini'
-const gayhubRelease = 'https://github.com/tindy2013/subconverter/releases';
-
-const defaultBackend = 'https://api.wcc.best/sub?'
-const personalRemoteConfig = [
-  { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/urltest-universal.ini", label: "Urltest" },
-  { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/no-urltest-universal.ini", label: "No-Urltest" },
-  { value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/no-urltest-ssr-group.ini", label: "No-Urltest-Group" }
-];
+const remoteConfigSample = "https://raw.githubusercontent.com/tindy2013/subconverter/master/base/example_external_config.ini";
+const gayhubRelease = "https://github.com/tindy2013/subconverter/releases";
+const defaultBackend = "https://api.wcc.best/sub?";
 
 export default {
   data() {
     return {
-      advanced: "1",
+      advanced: "2",
 
       options: {
         clientTypes: {
@@ -122,7 +126,35 @@ export default {
           ssd: "ssd",
           v2ray: "v2ray"
         },
-        customBaseRules: ["ClashBaseRule", "SurgeBaseRule", "SurfboardRuleBase"]
+        customBaseRules: [
+          "ClashBaseRule",
+          "SurgeBaseRule",
+          "SurfboardRuleBase"
+        ],
+        remoteConfig: [
+          {
+            label: 'universal',
+            options: [
+              {
+                label: 'No-Urltest',
+                value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/universal/no-urltest.ini'
+              },
+              {
+                label: 'Urltest',
+                value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/universal/urltest.ini'
+              },
+            ],
+          },
+          {
+            label: 'customized',
+            options: [
+              {
+                label: 'Maying',
+                value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/maying.ini'
+              }
+            ]
+          }
+        ]
       },
       form: {
         sourceSubUrl: "",
@@ -158,14 +190,10 @@ export default {
     gotoRemoteConfig() {
       window.open(remoteConfigSample);
     },
-    getPersonalRemoteConfig(queryString, cb) {
-      let results = queryString ? personalRemoteConfig.filter(this.createFilter(queryString)) : personalRemoteConfig;
-      cb(results)
-    },
     createFilter(queryString) {
-      return (restaurant) => {
+      return restaurant => {
         return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-      }
+      };
     },
     clashInstall() {
       if (this.customSubUrl === "") {
@@ -191,7 +219,8 @@ export default {
         return false;
       }
 
-      let backend = this.form.customBackend === '' ? defaultBackend : this.form.customBackend
+      let backend =
+        this.form.customBackend === "" ? defaultBackend : this.form.customBackend;
 
       let sourceSub = this.form.sourceSubUrl;
       sourceSub = sourceSub.replace(/[\n|\r|\n\r]/g, "|");

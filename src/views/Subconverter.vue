@@ -91,6 +91,7 @@
 
               <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
                 <el-button style="width: 120px" type="danger" @click="makeUrl">生成订阅链接</el-button>
+                <el-button style="width: 120px" type="danger" @click="makeShortUrl" :loading="loading">生成短链接</el-button>
                 <el-button
                   style="width: 120px"
                   type="primary"
@@ -190,6 +191,7 @@ export default {
         ruleset: ""
       },
 
+      loading: false,
       customSubUrl: ""
     };
   },
@@ -271,6 +273,27 @@ export default {
 
       this.$copyText(this.customSubUrl);
       this.$message.success("定制订阅已复制到剪切板");
+    },
+    makeShortUrl() {
+      if (this.customSubUrl === '') {
+        this.$message.warning("请先生成订阅链接，再获取对应短链接")
+        return false
+      }
+
+      this.loading = true
+
+      this.$axios.get('/api/short?longUrl=' + encodeURIComponent(this.customSubUrl)).then(res => {
+        if (res.data.Code === 1 && res.data.ShortUrl !== '') {
+          this.$copyText(res.data.ShortUrl);
+          this.$message.success("短链接已复制到剪切板")
+        } else {
+          this.$message.error("短链接获取失败：" + res.data.Message)
+        }
+      }).catch(() => {
+        this.$message.error("短链接获取失败")
+      }).finally(() => {
+        this.loading = false
+      })
     }
   }
 };

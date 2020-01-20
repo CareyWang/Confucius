@@ -282,7 +282,7 @@ export default {
 
       this.loading = true
 
-      this.$axios.get('/api/short?longUrl=' + encodeURIComponent(this.customSubUrl)).then(res => {
+      this.$axios.get('https://api.wcc.best/short?longUrl=' + encodeURIComponent(this.customSubUrl)).then(res => {
         if (res.data.Code === 1 && res.data.ShortUrl !== '') {
           this.$copyText(res.data.ShortUrl);
           this.$message.success("短链接已复制到剪切板")

@@ -66,9 +66,6 @@
                 <el-form-item label="ExcludeRemarks:">
                   <el-input v-model="form.excludeRemarks" placeholder="节点名不包含的关键字，支持正则" />
                 </el-form-item>
-                <!-- <el-form-item v-for="(v, k) in options.customBaseRules" :key="k" :label="v + ':'">
-                  <el-input :v-model="'options.' + v" />
-                </el-form-item>-->
               </div>
 
               <div style="margin-top: 50px"></div>
@@ -200,7 +197,6 @@ export default {
   },
   mounted() {
     this.form.clientType = "clashr";
-    this.notify();
   },
   methods: {
     onCopy() {
@@ -295,15 +291,6 @@ export default {
       }).finally(() => {
         this.loading = false
       })
-    },
-    notify() {
-      const h = this.$createElement;
-
-      this.$notify({
-        title: '隐私提示',
-        type: 'warning',
-        message: h('i', { style: 'color: teal'}, '各种订阅链接（短链接服务除外）生成纯前端实现，无隐私问题。后端服务请尽量自行搭建，为方便自身，默认提供后端转换服务，隐私担忧者请勿使用。远程配置文件使用本人oss存储，请大家低调食用，谢谢配合🙏 ')
-      });
     }
   }
 };

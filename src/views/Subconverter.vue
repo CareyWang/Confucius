@@ -6,10 +6,10 @@
           <div slot="header">Subscription Converter</div>
           <el-container>
             <el-form :model="form" label-width="120px" label-position="left" style="width: 100%">
-              <el-form-item label="模式设置:">
+              <!-- <el-form-item label="模式设置:">
                 <el-radio v-model="advanced" label="1">基础模式</el-radio>
                 <el-radio v-model="advanced" label="2">进阶模式</el-radio>
-              </el-form-item>
+              </el-form-item>-->
               <el-form-item label="订阅链接:">
                 <el-input
                   v-model="form.sourceSubUrl"
@@ -25,10 +25,6 @@
               </el-form-item>
 
               <div v-if="advanced === '2'">
-                <el-form-item label="emoji:">
-                  <el-radio v-model="form.emoji" label="true">是</el-radio>
-                  <el-radio v-model="form.emoji" label="false">否</el-radio>
-                </el-form-item>
                 <el-form-item label="后端地址:">
                   <el-input
                     ref="backend"
@@ -39,23 +35,24 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item label="远程配置:">
-                  <el-select 
-                    v-model="form.remoteConfig" 
+                  <el-select
+                    v-model="form.remoteConfig"
                     allow-create
                     filterable
-                    placeholder="请选择" 
+                    placeholder="请选择"
                     style="width: 100%"
                   >
                     <el-option-group
                       v-for="group in options.remoteConfig"
                       :key="group.label"
-                      :label="group.label">
+                      :label="group.label"
+                    >
                       <el-option
                         v-for="item in group.options"
                         :key="item.value"
                         :label="item.label"
-                        :value="item.value">
-                      </el-option>
+                        :value="item.value"
+                      ></el-option>
                     </el-option-group>
                     <el-button slot="append" @click="gotoRemoteConfig" icon="el-icon-link">配置示例</el-button>
                   </el-select>
@@ -65,6 +62,39 @@
                 </el-form-item>
                 <el-form-item label="ExcludeRemarks:">
                   <el-input v-model="form.excludeRemarks" placeholder="节点名不包含的关键字，支持正则" />
+                </el-form-item>
+                <el-form-item label-width="0px">
+                  <el-row type="flex">
+                    <el-col>
+                      <el-checkbox
+                        v-model="form.nodeList"
+                        label="输出为 Node List"
+                        border
+                        style="margin-right: 5px"
+                      ></el-checkbox>
+                      <el-checkbox
+                        v-model="form.emoji"
+                        label="Emoji"
+                        border
+                        style="margin-left: 5px"
+                      ></el-checkbox>
+                    </el-col>
+                    <el-popover v-model="form.extraset">
+                      <el-row>
+                        <el-checkbox v-model="form.sort" label="排序节点"></el-checkbox>
+                      </el-row>
+                      <el-row>
+                        <el-checkbox v-model="form.udp" label="启用 UDP"></el-checkbox>
+                      </el-row>
+                      <el-row>
+                        <el-checkbox v-model="form.tfo" label="启用 TFO"></el-checkbox>
+                      </el-row>
+                      <el-row>
+                        <el-checkbox v-model="form.scv" label="跳过证书验证"></el-checkbox>
+                      </el-row>
+                      <el-button slot="reference">更多选项</el-button>
+                    </el-popover>
+                  </el-row>
                 </el-form-item>
               </div>
 
@@ -88,7 +118,12 @@
 
               <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
                 <el-button style="width: 120px" type="danger" @click="makeUrl">生成订阅链接</el-button>
-                <el-button style="width: 120px" type="danger" @click="makeShortUrl" :loading="loading">生成短链接</el-button>
+                <el-button
+                  style="width: 120px"
+                  type="danger"
+                  @click="makeShortUrl"
+                  :loading="loading"
+                >生成短链接</el-button>
                 <el-button
                   style="width: 120px"
                   type="primary"
@@ -106,7 +141,8 @@
 </template>
 
 <script>
-const remoteConfigSample = "https://raw.githubusercontent.com/tindy2013/subconverter/master/base/example_external_config.ini";
+const remoteConfigSample =
+  "https://raw.githubusercontent.com/tindy2013/subconverter/master/base/example_external_config.ini";
 const gayhubRelease = "https://github.com/tindy2013/subconverter/releases";
 const defaultBackend = "https://api.wcc.best/sub?";
 
@@ -117,18 +153,17 @@ export default {
 
       options: {
         clientTypes: {
-          clash: "clash",
-          clashr: "clashr",
-          surge2: "surge&ver=2",
-          surge3: "surge&ver=3",
-          surge4: "surge&ver=4",
-          quantumult: "quan",
-          quantumultx: "quanx",
-          surfboard: "surfboard",
+          Clash: "clash",
+          ClashR: "clashr",
+          Surge2: "surge&ver=2",
+          Surge3: "surge&ver=3",
+          Surge4: "surge&ver=4",
+          Quantumult: "quan",
+          QuantumultX: "quanx",
+          Surfboard: "surfboard",
           ss: "ss",
           ssr: "ssr",
-          ssd: "ssd",
-          v2ray: "v2ray"
+          ssd: "ssd"
         },
         customBaseRules: [
           "ClashBaseRule",
@@ -137,37 +172,42 @@ export default {
         ],
         remoteConfig: [
           {
-            label: 'universal',
+            label: "universal",
             options: [
               {
-                label: 'No-Urltest',
-                value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/universal/no-urltest.ini'
+                label: "No-Urltest",
+                value:
+                  "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/universal/no-urltest.ini"
               },
               {
-                label: 'Urltest',
-                value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/universal/urltest.ini'
-              },
-            ],
-          },
-          {
-            label: 'customized',
-            options: [
-              {
-                label: 'Maying',
-                value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/maying.ini'
-              },
-              {
-                label: 'Nexitally',
-                value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/nexitally.ini'
+                label: "Urltest",
+                value:
+                  "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/universal/urltest.ini"
               }
             ]
           },
           {
-            label: 'Special',
+            label: "customized",
             options: [
               {
-                label: 'NeteaseUnblock',
-                value: 'https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/special/netease.ini'
+                label: "Maying",
+                value:
+                  "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/maying.ini"
+              },
+              {
+                label: "Nexitally",
+                value:
+                  "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/nexitally.ini"
+              }
+            ]
+          },
+          {
+            label: "Special",
+            options: [
+              {
+                label: "NeteaseUnblock",
+                value:
+                  "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/special/netease.ini"
               }
             ]
           }
@@ -181,11 +221,13 @@ export default {
         remoteConfig: "",
         excludeRemarks: "",
         includeRemarks: "",
-        ClashBaseRule: "",
-        SurgeBaseRule: "",
-        SurfboardRuleBase: "",
-        rename_node: "",
-        ruleset: ""
+        nodeList: false,
+        extraset: false,
+        sort: false,
+        udp: false,
+        tfo: false,
+        scv: false,
+        fdn: true
       },
 
       loading: false,
@@ -210,7 +252,10 @@ export default {
     },
     createFilter(queryString) {
       return restaurant => {
-        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        return (
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        );
       };
     },
     clashInstall() {
@@ -238,7 +283,9 @@ export default {
       }
 
       let backend =
-        this.form.customBackend === "" ? defaultBackend : this.form.customBackend;
+        this.form.customBackend === ""
+          ? defaultBackend
+          : this.form.customBackend;
 
       let sourceSub = this.form.sourceSubUrl;
       sourceSub = sourceSub.replace(/[\n|\r|\n\r]/g, "|");
@@ -266,31 +313,47 @@ export default {
           this.customSubUrl +=
             "&include=" + encodeURIComponent(this.form.includeRemarks);
         }
+
+        this.customSubUrl += "&list=" + this.form.nodeList.toString();
+        this.customSubUrl +=
+          "&udp=" +
+          this.form.udp.toString() +
+          "&tfo=" +
+          this.form.tfo.toString() +
+          "&scv=" +
+          this.form.scv.toString();
       }
 
       this.$copyText(this.customSubUrl);
       this.$message.success("定制订阅已复制到剪切板");
     },
     makeShortUrl() {
-      if (this.customSubUrl === '') {
-        this.$message.warning("请先生成订阅链接，再获取对应短链接")
-        return false
+      if (this.customSubUrl === "") {
+        this.$message.warning("请先生成订阅链接，再获取对应短链接");
+        return false;
       }
 
-      this.loading = true
+      this.loading = true;
 
-      this.$axios.get('https://api.wcc.best/short?longUrl=' + encodeURIComponent(this.customSubUrl)).then(res => {
-        if (res.data.Code === 1 && res.data.ShortUrl !== '') {
-          this.$copyText(res.data.ShortUrl);
-          this.$message.success("短链接已复制到剪切板")
-        } else {
-          this.$message.error("短链接获取失败：" + res.data.Message)
-        }
-      }).catch(() => {
-        this.$message.error("短链接获取失败")
-      }).finally(() => {
-        this.loading = false
-      })
+      this.$axios
+        .get(
+          "https://api.wcc.best/short?longUrl=" +
+            encodeURIComponent(this.customSubUrl)
+        )
+        .then(res => {
+          if (res.data.Code === 1 && res.data.ShortUrl !== "") {
+            this.$copyText(res.data.ShortUrl);
+            this.$message.success("短链接已复制到剪切板");
+          } else {
+            this.$message.error("短链接获取失败：" + res.data.Message);
+          }
+        })
+        .catch(() => {
+          this.$message.error("短链接获取失败");
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     }
   }
 };

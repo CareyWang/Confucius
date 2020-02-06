@@ -216,11 +216,11 @@ export default {
       form: {
         sourceSubUrl: "",
         clientType: "",
-        emoji: "true",
         customBackend: "",
         remoteConfig: "",
         excludeRemarks: "",
         includeRemarks: "",
+        emoji: true,
         nodeList: false,
         extraset: false,
         sort: false,

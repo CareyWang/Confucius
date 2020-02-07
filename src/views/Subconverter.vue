@@ -198,6 +198,11 @@ export default {
                 label: "Nexitally",
                 value:
                   "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/nexitally.ini"
+              },
+              {
+                label: "YoYu",
+                value:
+                  "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/yoyu.ini"
               }
             ]
           },

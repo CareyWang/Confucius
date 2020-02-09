@@ -203,6 +203,10 @@ export default {
                 label: "YoYu",
                 value:
                   "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/yoyu.ini"
+              },
+              {
+                label: "贼船",
+                value: "https://careywong-public-docs.oss-cn-shanghai.aliyuncs.com/subconverter/customized/zeichuan.ini"
               }
             ]
           },
@@ -333,6 +337,9 @@ export default {
       this.$message.success("定制订阅已复制到剪切板");
     },
     makeShortUrl() {
+      this.$message.warning('Debuging!')
+      return false
+
       if (this.customSubUrl === "") {
         this.$message.warning("请先生成订阅链接，再获取对应短链接");
         return false;

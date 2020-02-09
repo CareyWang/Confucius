@@ -339,7 +339,8 @@ export default {
     makeShortUrl() {
       this.$message.warning('Debuging!')
       return false
-
+      
+      /*
       if (this.customSubUrl === "") {
         this.$message.warning("请先生成订阅链接，再获取对应短链接");
         return false;
@@ -366,6 +367,7 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+      */
     }
   }
 };

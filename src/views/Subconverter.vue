@@ -337,10 +337,6 @@ export default {
       this.$message.success("定制订阅已复制到剪切板");
     },
     makeShortUrl() {
-      this.$message.warning('Debuging!')
-      return false
-      
-      /*
       if (this.customSubUrl === "") {
         this.$message.warning("请先生成订阅链接，再获取对应短链接");
         return false;
@@ -351,7 +347,7 @@ export default {
       this.$axios
         .get(
           "https://api.wcc.best/short?longUrl=" +
-            encodeURIComponent(this.customSubUrl)
+            btoa(this.customSubUrl)
         )
         .then(res => {
           if (res.data.Code === 1 && res.data.ShortUrl !== "") {
@@ -367,7 +363,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-      */
     }
   }
 };

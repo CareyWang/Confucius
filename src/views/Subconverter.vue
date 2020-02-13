@@ -404,8 +404,6 @@ export default {
         });
     },
     confirmUploadConfig() {
-      console.log(this.uploadConfig);
-
       if (this.uploadConfig === "") {
         this.$message.warning("远程配置不能为空");
         return false;

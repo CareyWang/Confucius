@@ -117,13 +117,18 @@
               </el-form-item>
 
               <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
-                <el-button style="width: 120px" type="danger" @click="makeUrl" :disabled="form.sourceSubUrl.length === 0">生成订阅链接</el-button>
+                <el-button
+                  style="width: 120px"
+                  type="danger"
+                  @click="makeUrl"
+                  :disabled="form.sourceSubUrl.length === 0"
+                >生成订阅链接</el-button>
                 <el-button
                   style="width: 120px"
                   type="danger"
                   @click="makeShortUrl"
                   :loading="loading"
-                   :disabled="customSubUrl.length === 0"
+                  :disabled="customSubUrl.length === 0"
                 >生成短链接</el-button>
                 <!-- <el-button style="width: 120px" type="primary" @click="surgeInstall" icon="el-icon-connection">一键导入Surge</el-button> -->
               </el-form-item>
@@ -150,7 +155,14 @@
       </el-col>
     </el-row>
 
-    <el-dialog title="Remote config upload" :visible.sync="dialogUploadConfigVisible" :before-close="beforeCloseUploadDialog" width="700px">
+    <el-dialog
+      title="Remote config upload"
+      :visible.sync="dialogUploadConfigVisible"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="700px"
+    >
       <el-form label-position="left" label-width="130px">
         <el-form-item label="密码" prop="uploadPasswordItem">
           <el-input v-model="uploadPassword" show-password placeholder="请输入密码" style="width: 250px"></el-input>
@@ -166,7 +178,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogUploadConfigVisible = false">取 消</el-button>
+        <el-button @click="uploadConfig = ''; dialogUploadConfigVisible = false">取 消</el-button>
         <el-button
           type="primary"
           @click="confirmUploadConfig"
@@ -182,6 +194,8 @@ const remoteConfigSample =
   "https://raw.githubusercontent.com/tindy2013/subconverter/master/base/example_external_config.ini";
 const gayhubRelease = "https://github.com/tindy2013/subconverter/releases";
 const defaultBackend = "https://api.wcc.best/sub?";
+const shortUrlBackend = "https://api.wcc.best/short";
+const configUploadBackend = "https://api.wcc.best/config/upload";
 
 export default {
   data() {
@@ -387,7 +401,7 @@ export default {
       this.loading = true;
 
       this.$axios
-        .get("https://api.wcc.best/short?longUrl=" + btoa(this.customSubUrl))
+        .get(shortUrlBackend + "?longUrl=" + btoa(this.customSubUrl))
         .then(res => {
           if (res.data.Code === 1 && res.data.ShortUrl !== "") {
             this.$copyText(res.data.ShortUrl);
@@ -416,20 +430,22 @@ export default {
       data.append("config", this.uploadConfig);
 
       this.$axios
-        .post("https://api.wcc.best/config/upload", data, {
+        .post(configUploadBackend, data, {
           header: {
             "Content-Type": "application/form-data; charset=utf-8"
           }
         })
         .then(res => {
           if (res.data.Code === 1 && res.data.url !== "") {
-            this.$message.success("远程配置上传成功，配置链接已复制到剪贴板，有效期三个月望知悉");
+            this.$message.success(
+              "远程配置上传成功，配置链接已复制到剪贴板，有效期三个月望知悉"
+            );
 
             // 自动填充至『表单-远程配置』
             this.form.remoteConfig = res.data.Url;
             this.$copyText(this.form.remoteConfig);
 
-            this.dialogUploadConfigVisible = false
+            this.dialogUploadConfigVisible = false;
           } else {
             this.$message.error("远程配置上传失败：" + res.data.Message);
           }
@@ -440,9 +456,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-    beforeCloseUploadDialog() {
-      this.uploadConfig = ''
     }
   }
 };

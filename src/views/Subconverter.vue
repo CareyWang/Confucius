@@ -92,6 +92,9 @@
                       <el-row>
                         <el-checkbox v-model="form.scv" label="跳过证书验证"></el-checkbox>
                       </el-row>
+                      <el-row>
+                        <el-checkbox v-model="form.fdn" label="过滤非法节点"></el-checkbox>
+                      </el-row>
                       <el-button slot="reference">更多选项</el-button>
                     </el-popover>
                   </el-row>
@@ -163,16 +166,30 @@
       :close-on-press-escape="false"
       width="700px"
     >
-      <el-form label-position="left" label-width="130px">
-        <el-form-item label="密码" prop="uploadPasswordItem">
+      <el-form label-position="left" label-width="150px">
+        <el-form-item prop="uploadPasswordItem">
+          <div slot="label">
+            密码：
+            <el-popover trigger="hover" placement="right">
+              <el-link type="primary" :href="myBot" target="_blank" icon="el-icon-s-promotion">@CareyWong_bot</el-link>
+              <i class="el-icon-question" slot="reference"></i>
+            </el-popover>
+          </div>
           <el-input v-model="uploadPassword" show-password placeholder="请输入密码" style="width: 250px"></el-input>
         </el-form-item>
-        <el-form-item label="Remote config" prop="uploadConfig">
+        <el-form-item prop="uploadConfig">
+          <div slot="label">
+            RemoteConfig：
+            <el-popover trigger="hover" placement="right">
+              <el-link type="primary" :href="sampleConfig" target="_blank" icon="el-icon-info">参考配置</el-link>
+              <i class="el-icon-question" slot="reference"></i>
+            </el-popover>
+          </div>
           <el-input
             v-model="uploadConfig"
             type="textarea"
             :autosize="{ minRows: 15, maxRows: 15}"
-            maxlength="2000"
+            maxlength="3000"
             show-word-limit
           ></el-input>
         </el-form-item>
@@ -191,11 +208,12 @@
 
 <script>
 const remoteConfigSample =
-  "https://raw.githubusercontent.com/tindy2013/subconverter/master/base/example_external_config.ini";
+  "https://raw.githubusercontent.com/tindy2013/subconverter/master/base/config/example_external_config.ini";
 const gayhubRelease = "https://github.com/tindy2013/subconverter/releases";
 const defaultBackend = "https://api.wcc.best/sub?";
 const shortUrlBackend = "https://api.wcc.best/short";
 const configUploadBackend = "https://api.wcc.best/config/upload";
+const tgBotLink = "https://t.me/CareyWong_bot"
 
 export default {
   data() {
@@ -288,7 +306,7 @@ export default {
         udp: false,
         tfo: false,
         scv: false,
-        fdn: true
+        fdn: false,
       },
 
       loading: false,
@@ -296,7 +314,9 @@ export default {
 
       dialogUploadConfigVisible: false,
       uploadConfig: "",
-      uploadPassword: ""
+      uploadPassword: "",
+      myBot: tgBotLink,
+      sampleConfig: remoteConfigSample,
     };
   },
   created() {
@@ -386,7 +406,9 @@ export default {
           "&tfo=" +
           this.form.tfo.toString() +
           "&scv=" +
-          this.form.scv.toString();
+          this.form.scv.toString() + 
+          "&fdn=" + 
+          this.form.fdn.toString();
       }
 
       this.$copyText(this.customSubUrl);

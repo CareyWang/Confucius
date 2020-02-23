@@ -25,15 +25,6 @@
               </el-form-item>
 
               <div v-if="advanced === '2'">
-                <el-form-item label="后端地址:">
-                  <el-input
-                    ref="backend"
-                    v-model="form.customBackend"
-                    placeholder="动动小手，（建议）自行搭建后端服务。例：http://127.0.0.1:25500?sub"
-                  >
-                    <el-button slot="append" @click="gotoGayhub" icon="el-icon-link">前往项目仓库</el-button>
-                  </el-input>
-                </el-form-item>
                 <el-form-item label="远程配置:">
                   <el-select
                     v-model="form.remoteConfig"
@@ -57,11 +48,23 @@
                     <el-button slot="append" @click="gotoRemoteConfig" icon="el-icon-link">配置示例</el-button>
                   </el-select>
                 </el-form-item>
+                <el-form-item label="后端地址:">
+                  <el-input
+                    ref="backend"
+                    v-model="form.customBackend"
+                    placeholder="动动小手，（建议）自行搭建后端服务。例：http://127.0.0.1:25500?sub"
+                  >
+                    <el-button slot="append" @click="gotoGayhub" icon="el-icon-link">前往项目仓库</el-button>
+                  </el-input>
+                </el-form-item>
                 <el-form-item label="IncludeRemarks:">
                   <el-input v-model="form.includeRemarks" placeholder="节点名包含的关键字，支持正则" />
                 </el-form-item>
                 <el-form-item label="ExcludeRemarks:">
                   <el-input v-model="form.excludeRemarks" placeholder="节点名不包含的关键字，支持正则" />
+                </el-form-item>
+                <el-form-item label="FileName:">
+                  <el-input v-model="form.filename" placeholder="返回的订阅文件名" />
                 </el-form-item>
                 <el-form-item label-width="0px">
                   <el-row type="flex">
@@ -230,15 +233,11 @@ export default {
           Quantumult: "quan",
           QuantumultX: "quanx",
           Surfboard: "surfboard",
+          Loon: "loon",
           ss: "ss",
           ssr: "ssr",
           ssd: "ssd"
         },
-        customBaseRules: [
-          "ClashBaseRule",
-          "SurgeBaseRule",
-          "SurfboardRuleBase"
-        ],
         remoteConfig: [
           {
             label: "universal",
@@ -304,6 +303,7 @@ export default {
         remoteConfig: "",
         excludeRemarks: "",
         includeRemarks: "",
+        fileName: "",
         emoji: true,
         nodeList: false,
         extraset: false,
@@ -399,6 +399,10 @@ export default {
         if (this.form.includeRemarks !== "") {
           this.customSubUrl +=
             "&include=" + encodeURIComponent(this.form.includeRemarks);
+        }
+        if (this.form.filename !== "") {
+          this.customSubUrl +=
+            "&filename=" + encodeURIComponent(this.form.filename);
         }
 
         this.customSubUrl += "&list=" + this.form.nodeList.toString();
